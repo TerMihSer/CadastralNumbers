@@ -31,7 +31,7 @@ class CommonParserTest extends \Codeception\Test\Unit
         ];
     }
 
-    public function testParse()
+    public function testTwoExistingElements()
     {
         $params['cadastralNumber'] = '69:27:0000022:1306, 69:27:0000022:1307';
         $componentCadastralNumbers = \Yii::createObject([
@@ -60,5 +60,41 @@ class CommonParserTest extends \Codeception\Test\Unit
                 'area' => '10176.0000'
             ]
         ], $dataCadastralNumbers);
+    }
+
+    public function testNoExistingElements()
+    {
+        $params['cadastralNumber'] = '69:27:0000022:1322, 69:27:0000022:1323';
+        $componentCadastralNumbers = \Yii::createObject([
+            'class' => CadastralNumbers::class
+        ], [new Plot(), 'http://pkk.bigland.ru/api/test/plots']);
+
+        $modelParser = \Yii::createObject([
+            'class' => CommonParser::class
+        ], [$componentCadastralNumbers]);
+
+        $dataCadastralNumbers = $modelParser->parse($params['cadastralNumber']);
+        $this->assertEquals([], $dataCadastralNumbers);
+    }
+
+    public function testOneExistingElements()
+    {
+        $params['cadastralNumber'] = '69:27:0000022:1306, 69:27:0000022:1323';
+        $componentCadastralNumbers = \Yii::createObject([
+            'class' => CadastralNumbers::class
+        ], [new Plot(), 'http://pkk.bigland.ru/api/test/plots']);
+
+        $modelParser = \Yii::createObject([
+            'class' => CommonParser::class
+        ], [$componentCadastralNumbers]);
+
+        $dataCadastralNumbers = $modelParser->parse($params['cadastralNumber']);
+        $this->assertEquals([[
+            'id' => 1,
+            'cadastralNumber' => '69:27:0000022:1306',
+            'address' => 'Тверская область, р-н Ржевский, с/пос "Успенское", северо-западнее д. Горшково из земель СПКколхоз "Мирный"',
+            'price' => '36126.0000',
+            'area' => '10035.0000'
+        ]], $dataCadastralNumbers);
     }
 }

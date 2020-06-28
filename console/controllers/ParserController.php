@@ -22,8 +22,11 @@ class ParserController extends Controller
             ], [$componentCadastralNumbers]);
 
             $dataCadastralNumbers = $modelParser->parse($cadastralNumbers);
-            foreach ($dataCadastralNumbers as $item) {
-                print_r($item);
+            foreach ($dataCadastralNumbers as $index => $item) {
+                $this->stdout("indexElement: " . $index . "\n");
+                foreach ($item as $key => $value) {
+                    $this->stdout("\t" . $key . ':' . $value . "\n");
+                }
             }
             return ExitCode::OK;
         }
