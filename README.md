@@ -27,7 +27,7 @@ common/components/CadastralNumbers
 Для запуска консольного приложения:  
 yii parser/parse 69:27:0000022:1306  
 Для запуска rest:  
-Использовал phpstorm REST Client в path GET "/plots/{id}"  
+Использовал phpstorm REST Client в path GET "/api/v1/plots/{id}"  
 Для запуска теста парсера:  
 vendor\bin\codecept run -- -c common
 
